@@ -13,13 +13,14 @@ import {
 import { createNewSolanaWallet } from "./utils/createSolanaWallet.js";
 import dotenv from 'dotenv';
 import fs from 'fs';
+import fetch from 'node-fetch';
 
 dotenv.config();
 
 // Configuration
 const BENCHMARK_CONFIG = {
-    iterations: 10,           // Number of transaction signing operations to test
-    warmupIterations: 2,      // Warmup iterations (not counted in results)
+    iterations: 50,           // Number of transaction signing operations to test
+    warmupIterations: 5,      // Warmup iterations (not counted in results)
     destinationAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM", // Fixed destination
     transferAmount: 10000     // 0.00001 SOL in lamports
 };
@@ -46,6 +47,42 @@ function calculateStats(times) {
         p95: sorted[Math.floor(sorted.length * 0.95)],
         p99: sorted[Math.floor(sorted.length * 0.99)]
     };
+}
+
+// Get geo location information
+async function getGeoLocation() {
+    try {
+        // Using a free IP geolocation service
+        const response = await fetch('http://ip-api.com/json/?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp', {
+            timeout: 5000 // 5 second timeout
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            return {
+                country: data.country,
+                countryCode: data.countryCode,
+                region: data.regionName,
+                city: data.city,
+                lat: data.lat,
+                lon: data.lon,
+                timezone: data.timezone,
+                isp: data.isp,
+                success: true
+            };
+        } else {
+            console.warn('⚠️  Geo location lookup failed:', data.message);
+            return { success: false, error: data.message };
+        }
+    } catch (error) {
+        console.warn('⚠️  Could not fetch geo location:', error.message);
+        return { success: false, error: error.message };
+    }
 }
 
 // Initialize clients
@@ -182,10 +219,27 @@ async function benchmarkPrivy(client, walletId, walletAddress, connection, itera
 }
 
 // Format and display results
-function displayResults(turnkeyStats, privyStats, config) {
+function displayResults(turnkeyStats, privyStats, config, geoLocation) {
     console.log("\n" + "=".repeat(80));
     console.log("🏆 TRANSACTION SIGNING BENCHMARK RESULTS");
     console.log("=".repeat(80));
+    
+    // Display timestamp and location info
+    const utcTime = new Date().toISOString();
+    console.log(`⏰ UTC Time: ${utcTime}`);
+    
+    if (geoLocation && geoLocation.success) {
+        console.log(`🌍 Location: ${geoLocation.city}, ${geoLocation.region}, ${geoLocation.country} (${geoLocation.countryCode})`);
+        console.log(`📍 Coordinates: ${geoLocation.lat}, ${geoLocation.lon}`);
+        console.log(`🕰️  Timezone: ${geoLocation.timezone}`);
+        console.log(`🌐 ISP: ${geoLocation.isp}`);
+    } else {
+        console.log("🌍 Location: Unable to determine location");
+        if (geoLocation && geoLocation.error) {
+            console.log(`   Error: ${geoLocation.error}`);
+        }
+    }
+    console.log("");
     
     console.log(`📋 Test Configuration:`);
     console.log(`   • Iterations: ${config.iterations}`);
@@ -232,9 +286,10 @@ function displayResults(turnkeyStats, privyStats, config) {
 }
 
 // Save results to JSON
-function saveResults(turnkeyTimes, privyTimes, turnkeyStats, privyStats, config) {
+function saveResults(turnkeyTimes, privyTimes, turnkeyStats, privyStats, config, geoLocation) {
     const results = {
         timestamp: new Date().toISOString(),
+        geoLocation: geoLocation || { success: false, error: "Location data not available" },
         benchmarkType: "transaction_signing",
         config: config,
         turnkey: {
@@ -262,6 +317,10 @@ async function runTransactionBenchmark() {
     try {
         console.log("🚀 Starting Transaction Signing Performance Benchmark");
         console.log("=".repeat(80));
+        
+        // Get geo location information
+        console.log("🌍 Fetching geo location information...");
+        const geoLocation = await getGeoLocation();
         
         // Initialize clients
         const { turnkeyClient, turnkeySigner, privyClient, connection } = await initializeClients();
@@ -297,10 +356,10 @@ async function runTransactionBenchmark() {
         const privyStats = calculateStats(privyTimes);
         
         // Display results
-        displayResults(turnkeyStats, privyStats, BENCHMARK_CONFIG);
+        displayResults(turnkeyStats, privyStats, BENCHMARK_CONFIG, geoLocation);
         
         // Save results
-        saveResults(turnkeyTimes, privyTimes, turnkeyStats, privyStats, BENCHMARK_CONFIG);
+        saveResults(turnkeyTimes, privyTimes, turnkeyStats, privyStats, BENCHMARK_CONFIG, geoLocation);
         
     } catch (error) {
         console.error("❌ Transaction benchmark failed:", error.message);
