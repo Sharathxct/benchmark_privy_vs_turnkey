@@ -12,7 +12,7 @@ dotenv.config();
 
 // Configuration
 const BENCHMARK_CONFIG = {
-    iterations: 10,           // Number of signing operations to test
+    iterations: 50,           // Number of signing operations to test
     warmupIterations: 5,      // Warmup iterations (not counted in results)
     message: "Hello, world! This is a benchmark test message."
 };
