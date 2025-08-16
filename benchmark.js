@@ -12,7 +12,7 @@ dotenv.config();
 
 // Configuration
 const BENCHMARK_CONFIG = {
-    iterations: 50,           // Number of signing operations to test
+    iterations: 10,           // Number of signing operations to test
     warmupIterations: 5,      // Warmup iterations (not counted in results)
     message: "Hello, world! This is a benchmark test message."
 };
@@ -272,9 +272,17 @@ function saveResults(turnkeyTimes, privyTimes, turnkeyStats, privyStats, config,
         }
     };
     
+    // Create results directory if it doesn't exist
+    const resultsDir = 'results';
+    if (!fs.existsSync(resultsDir)) {
+        fs.mkdirSync(resultsDir, { recursive: true });
+        console.log(`📁 Created results directory: ${resultsDir}`);
+    }
+    
     const filename = `benchmark-results-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
-    fs.writeFileSync(filename, JSON.stringify(results, null, 2));
-    console.log(`💾 Results saved to: ${filename}`);
+    const filepath = path.join(resultsDir, filename);
+    fs.writeFileSync(filepath, JSON.stringify(results, null, 2));
+    console.log(`💾 Results saved to: ${filepath}`);
 }
 
 // Main benchmark function

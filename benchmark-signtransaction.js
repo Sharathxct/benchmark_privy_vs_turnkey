@@ -13,6 +13,7 @@ import {
 import { createNewSolanaWallet } from "./utils/createSolanaWallet.js";
 import dotenv from 'dotenv';
 import fs from 'fs';
+import path from 'path';
 import fetch from 'node-fetch';
 
 dotenv.config();
@@ -307,9 +308,17 @@ function saveResults(turnkeyTimes, privyTimes, turnkeyStats, privyStats, config,
         }
     };
     
+    // Create results directory if it doesn't exist
+    const resultsDir = 'results';
+    if (!fs.existsSync(resultsDir)) {
+        fs.mkdirSync(resultsDir, { recursive: true });
+        console.log(`📁 Created results directory: ${resultsDir}`);
+    }
+    
     const filename = `transaction-benchmark-results-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
-    fs.writeFileSync(filename, JSON.stringify(results, null, 2));
-    console.log(`💾 Results saved to: ${filename}`);
+    const filepath = path.join(resultsDir, filename);
+    fs.writeFileSync(filepath, JSON.stringify(results, null, 2));
+    console.log(`💾 Results saved to: ${filepath}`);
 }
 
 // Main benchmark function
