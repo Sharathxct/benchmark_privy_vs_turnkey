@@ -1,0 +1,24 @@
+{
+  "name": "benchmark",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "privy": "node privy.js",
+    "turnkey": "node turnkey.js",
+    "benchmark": "node benchmark.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.14.0",
+  "dependencies": {
+    "@privy-io/server-auth": "^1.31.1",
+    "@turnkey/sdk-server": "^4.6.0",
+    "@turnkey/solana": "^1.0.41",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.1"
+  }
+}
