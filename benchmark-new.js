@@ -15,8 +15,8 @@ const BENCHMARK_CONFIG = {
         testMessage: "Hello, world! This is a benchmark test message."
     },
     transaction: {
-        iterations: 10,
-        warmupIterations: 2,
+        iterations: 50,
+        warmupIterations: 5,
         destinationAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
         transferAmount: 10000
     }

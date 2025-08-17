@@ -9,8 +9,8 @@ dotenv.config();
 
 // Configuration
 const BENCHMARK_CONFIG = {
-    iterations: 10,           // Number of transaction signing operations to test
-    warmupIterations: 2,      // Warmup iterations (not counted in results)
+    iterations: 1,           // Number of transaction signing operations to test
+    warmupIterations: 1,      // Warmup iterations (not counted in results)
     destinationAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM", // Fixed destination
     transferAmount: 10000     // 0.00001 SOL in lamports
 };

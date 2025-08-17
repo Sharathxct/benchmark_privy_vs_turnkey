@@ -1,0 +1,89 @@
+{
+  "timestamp": "2025-08-17T12:34:26.059Z",
+  "geoLocation": {
+    "country": "India",
+    "countryCode": "IN",
+    "region": "Telangana",
+    "city": "Hyderabad",
+    "lat": 17.3843,
+    "lon": 78.4583,
+    "timezone": "Asia/Kolkata",
+    "isp": "Reliance Jio Infocomm Limited",
+    "success": true
+  },
+  "benchmarkType": "transaction_signing",
+  "config": {
+    "iterations": 2,
+    "warmupIterations": 2,
+    "destinationAddress": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
+    "transferAmount": 10000
+  },
+  "services": {
+    "Coinbase": {
+      "rawTimes": [
+        728.4894169999998,
+        701.287875
+      ],
+      "statistics": {
+        "min": 701.287875,
+        "max": 728.4894169999998,
+        "mean": 714.8886459999999,
+        "median": 714.8886459999999,
+        "standardDeviation": 13.600770999999895,
+        "p95": 728.4894169999998,
+        "p99": 728.4894169999998
+      }
+    },
+    "Privy": {
+      "rawTimes": [
+        403.9944999999998,
+        486.21041700000023
+      ],
+      "statistics": {
+        "min": 403.9944999999998,
+        "max": 486.21041700000023,
+        "mean": 445.1024585,
+        "median": 445.1024585,
+        "standardDeviation": 41.10795850000022,
+        "p95": 486.21041700000023,
+        "p99": 486.21041700000023
+      }
+    },
+    "Turnkey": {
+      "rawTimes": [
+        581.0692920000001,
+        645.5431250000001
+      ],
+      "statistics": {
+        "min": 581.0692920000001,
+        "max": 645.5431250000001,
+        "mean": 613.3062085000001,
+        "median": 613.3062085000001,
+        "standardDeviation": 32.23691650000001,
+        "p95": 645.5431250000001,
+        "p99": 645.5431250000001
+      }
+    }
+  },
+  "comparison": {
+    "fastest": "Privy",
+    "slowest": "Coinbase",
+    "rankings": [
+      {
+        "rank": 1,
+        "service": "Privy",
+        "meanTime": 445.1024585
+      },
+      {
+        "rank": 2,
+        "service": "Turnkey",
+        "meanTime": 613.3062085000001
+      },
+      {
+        "rank": 3,
+        "service": "Coinbase",
+        "meanTime": 714.8886459999999
+      }
+    ]
+  }
+}
