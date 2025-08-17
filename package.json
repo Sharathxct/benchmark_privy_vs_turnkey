@@ -6,12 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "privy": "node privy.js",
-    "turnkey": "node turnkey.js",
-    "pt": "node privy-transaction.js",
-    "tt": "node turnkey-transaction.js",
-    "benchmark": "node benchmark.js",
-    "benchmark-t": "node benchmark-signtransaction.js"
+    "benchmark": "node benchmark-new.js",
+    "benchmark-message": "node benchmark-signmessage.js",
+    "benchmark-transaction": "node benchmark-signtransaction-new.js"
   },
   "keywords": [],
   "author": "",
